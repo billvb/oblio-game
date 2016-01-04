@@ -1,6 +1,47 @@
+"""
+
+oblio.py: A framework to collect and trade algorithms with your friends to play Oblio
+(otherwise known as MASTERMIND). A talented and trained human get average
+about 12-15 guesses before converging on the solution. What can your algorithm
+do?
+
+To play Oblio:
+
+    - There exists a secret 4-digit number in which no two digits are the same.
+      (e.g., "1 2 3 4" or "0 5 1 2".  "9 9 9 9" is NOT valid)
+
+    - Whenever you submit a guess of this secret nubmer, you get in return a 
+      2-tuple in the form (X, Y). Y indicates the number of digits within
+      your guess that are in the correct position, and X indicates the number
+      of digits you guessed correctly, but are in the wrong position.
+
+    - Having the result (0, 4) implies you've won and guessed the secret number
+      correctly.
+
+EXAMPLES:
+
+    When the secret number is "3 9 4 5":
+
+    - If you guess "1 2 4 5", you'll get back (0, 2), because "4" and "5" are
+      in the hidden number, and also in the proper spot.
+
+    - If you guess "5 4 9 3", you'll get back (4, 0), as all the digits in 
+      your guess are in the hidden number, but none in the correct spot.
+
+    - If you guess "0 1 2 8", you'll get back (0, 0). Since none of the digits 
+      in your guess are in the secret number.
+
+    - If your guess is "2 8 9 1", you'll get back (1, 0), implying you have
+      one correct digit in your guess but it's not in the correct spot. You'll
+      get this a lot and it's annoying.
+
+
+"""
 
 import unittest
 import random
+
+__credits__ = ["beer", "no internet access", "9 hour long-haul flight"]
 
 TUPLE_SIZE = 4
 DIGIT_BASE = 10
@@ -21,15 +62,20 @@ class Utils(object):
 
     @staticmethod
     def weighted_dice_roll(weight_map, exclusions):
+        # Actually, this does an UNWEIGHTED dice roll. Never got around to doing weighted.
+        # Don't think it would matter much anyway.
         new_map = {k: v for k, v in weight_map.iteritems() if k not in exclusions}
         return new_map.keys()[random.randint(0, len(new_map) - 1)]
 
+
 class OblioTuple(tuple):
+    # This is probably un-necessary.
     pass
 
 
 class OblioContext(object):
-   
+    """ Represents an oblio engine that is holding the secret number """
+
     def __init__(self, algorithm, hidden_tuple):
         assert isinstance(hidden_tuple, OblioTuple)
         self.algorithm = algorithm
@@ -57,6 +103,9 @@ class OblioContext(object):
             else:
                 self.algorithm.put(guess, response)
         else:
+            # There are fewer than 10,000 possibilities,
+            # so if your algorithm cannot get the correct solution
+            # in 10,000 tries, you[r solution] sucks.
             raise ValueError("Sucky algorithm")
 
 
@@ -65,6 +114,8 @@ class OblioAlg(object):
         self.known_tuples = {}
 
     def put(self, attempted_tuple, response):
+        # This is a callback that the oblio engine feeds the results
+        # of your guess to.
         self.known_tuples.update({attempted_tuple: response})
 
     def produce(self):
@@ -172,7 +223,7 @@ class UnitTests(unittest.TestCase):
 
 
 if __name__ == '__main__':
-   # unittest.main()
+    #unittest.main()
     
     secrets = [
         (1, 7, 8, 5),
@@ -185,7 +236,8 @@ if __name__ == '__main__':
         (2, 7, 4, 3),
         (2, 9, 3, 8)
     ]
-    
+   
+    # You can plug in your algorithm here.
     alg_dict = {
         SmartAlg: list(),
         RandAlg: list(),
