@@ -69,9 +69,9 @@ class SmartAlg(OblioAlg):
         if len(self.known_tuples) == 1:
             return OblioTuple((1, 2, 3, 4))
         if len(self.known_tuples) == 2:
-            return OblioTuple((2, 3, 4, 5))
-        if len(self.known_tuples) == 3:
             return OblioTuple((5, 6, 7, 8))
+        if len(self.known_tuples) == 3:
+            return OblioTuple((6, 7, 8, 9))
 
         for guess, response in self.known_tuples.iteritems():
             if response == (0, 0):
@@ -125,10 +125,6 @@ class SmartAlgVariant(OblioAlg):
 
     def produce(self):
         import random
-
-        if len(self.known_tuples) == 0:
-            return OblioTuple((0, 1, 2, 3))
-
 
         for guess, response in self.known_tuples.iteritems():
             if response == (0, 0):

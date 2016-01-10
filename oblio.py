@@ -135,4 +135,4 @@ if __name__ == '__main__':
         for s in secrets:
             ob = OblioContext(a(), OblioTuple(s))
             alg_dict[a].append(ob.solve())
-        print a.__name__, sum(alg_dict[a])/float(len(alg_dict[a]))
+        print a.__name__, sum(alg_dict[a])/float(len(alg_dict[a])), sorted(alg_dict[a])[len(alg_dict[a])/2]
