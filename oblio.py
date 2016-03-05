@@ -128,7 +128,7 @@ if __name__ == '__main__':
         #algs.ManualAlg: list(),
         algs.SmartAlg: list(),
         algs.SmartAlgVariant: list(),
-        #algs.RandAlg: list(),
+        algs.RandAlg: list(),
     }
 
     for a in alg_dict.keys():
