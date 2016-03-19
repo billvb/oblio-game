@@ -5,7 +5,7 @@ oblio.py: A framework to collect and trade algorithms with your friends to play 
 A talented and trained human get average about 12-15 guesses before converging on the solution. What can your algorithm
 do?
 
-To play Oblio:
+## To play Oblio:
 
  1. There exists a secret 4-digit number in which no two digits are the same.
     (e.g., "1 2 3 4" or "0 5 1 2".  "9 9 9 9" is NOT valid)
@@ -14,7 +14,7 @@ To play Oblio:
 
  3. Having the result (0, 4) implies you've won and guessed the secret number correctly.
 
-EXAMPLES:
+## EXAMPLES:
 
 When the secret number is "3 9 4 5":
 
