@@ -6,7 +6,7 @@ oblio.py: A framework to collect and trade algorithms with your friends to play 
 
 A long 9-hour AMS-IAD flight equipped with a Macbook Air provided me just the opportunity to dive into this and experiment. Most of the flight was unfortunately spent building this framework, and only a few hours on devising the algorithm. My plan is for this to become a continuous project to enhance and refine my algorithms for whenever I have a few hours to kill on long-haul flights.
 
-Playing Oblio: A talented and trained human averages about 12-15 guesses before converging on the solution. What can your algorithm do?
+Playing Oblio: A talented and trained human averages about 18-20 guesses before converging on the solution. What can your algorithm do?
 
 ## To Play Oblio
 
