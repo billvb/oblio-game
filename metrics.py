@@ -2,16 +2,14 @@ import json
 
 from oblio import OblioContext
 
+import algorithms
 from algorithms.utils import OblioTuple
 from algorithms.utils import MAX_GUESS
 from algorithms.utils import TUPLE_SIZE
 from algorithms.utils import DIGIT_BASE
 
-import algorithms
 
 if __name__ == '__main__':
-    #unittest.main()
-    
     secrets = [
         (1, 7, 8, 5),
         (2, 1, 9, 7),
@@ -48,6 +46,7 @@ if __name__ == '__main__':
         for s in secrets:
             ob = OblioContext(a(), OblioTuple(s))
             alg_dict[a].append(ob.solve())
+
         print json.dumps({
             'name': a.__name__,
             'mean': sum(alg_dict[a])/float(len(alg_dict[a])),

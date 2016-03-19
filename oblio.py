@@ -116,7 +116,8 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     if args.subcommand[0] == 'play':
-        context = OblioContext(algorithms.ManualAlg(), OblioTuple((1, 2, 3, 4)))
+        secret_tuple = OblioTuple.get_random()
+        context = OblioContext(algorithms.ManualAlg(), secret_tuple)
         context.solve(print_response=True)
     elif args.subcommand[0] == 'test':
         suite = unittest.TestLoader().loadTestsFromTestCase(UnitTests)
