@@ -1,7 +1,8 @@
 """
 
-oblio.py: A framework to collect and trade algorithms with your friends to play Oblio
-(otherwise known as MASTERMIND). A talented and trained human get average
+oblio.py: A framework to collect and trade algorithms with your friends to play Oblio.
+
+A talented and trained human get average
 about 12-15 guesses before converging on the solution. What can your algorithm
 do?
 
@@ -38,11 +39,18 @@ EXAMPLES:
 
 """
 
+from __future__ import print_function
+import sys
 import unittest
 import random
+import json
 
-from utils import *
-import algs
+from algorithms.utils import OblioTuple
+from algorithms.utils import MAX_GUESS
+from algorithms.utils import TUPLE_SIZE
+from algorithms.utils import DIGIT_BASE
+
+import algorithms
 
 __credits__ = ["beer", "no internet access", "9 hour long-haul flight"]
 
@@ -68,13 +76,15 @@ class OblioContext(object):
         self.attempts += 1
         return (cnt_misplaced, cnt_correct)
 
-    def solve(self):
+    def solve(self, print_response=False):
         for i in xrange(0, MAX_GUESS):
             guess = self.algorithm.produce()
             response = self.verify(guess)
             if response == (0, TUPLE_SIZE):
                 return self.attempts
             else:
+                if print_response:
+                    print('Guess %3d: %s --> %s' % (i, guess, response))
                 self.algorithm.put(guess, response)
         else:
             # There are fewer than 10,000 possibilities,
@@ -82,13 +92,14 @@ class OblioContext(object):
             # in 10,000 tries, you[r solution] sucks.
             raise ValueError("Sucky algorithm")
 
+
 class UnitTests(unittest.TestCase):
     def test_verify(self):
         t0 = OblioTuple((0, 1, 2, 3))
         t1 = OblioTuple((3, 2, 1, 0))
         t2 = OblioTuple((6, 7, 8, 9))
         t3 = OblioTuple((3, 1, 8, 9))
-        c = OblioContext(OblioTuple((3, 2, 1, 0)))
+        c = OblioContext(None, OblioTuple((3, 2, 1, 0)))
         self.assertEqual(c.verify(t0), (4, 0))
         self.assertEqual(c.verify(t1), (0, 4))
         self.assertEqual(c.verify(t2), (0, 0))
@@ -96,43 +107,43 @@ class UnitTests(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    #unittest.main()
-    
-    secrets = [
-        (1, 7, 8, 5),
-        (2, 1, 9, 7),
-        (9, 1, 2, 3),
-        (3, 2, 9, 1),
-        (0, 8, 2, 1),
-        (6, 1, 9, 4),
-        (5, 3, 2, 8),
-        (2, 7, 4, 3),
-        (2, 9, 3, 8),
-        (6, 3, 2, 0),
-        (0, 1, 2, 9),
-        (0, 1, 9, 4),
-        (4, 9, 0, 8),
-        (1, 9, 2, 8),
-        (7, 6, 5, 0),
-        (4, 3, 0, 1),
-        (4, 1, 8, 2),
-        (0, 2, 4, 3),
-        (3, 5, 2, 4),
-        (1, 2, 9, 3),
-        (3, 4, 5, 6),
-        (1, 4, 7, 2)
-    ]
-   
-    # You can plug in your algorithm here.
-    alg_dict = {
-        #algs.ManualAlg: list(),
-        algs.SmartAlg: list(),
-        algs.SmartAlgVariant: list(),
-        algs.RandAlg: list(),
-    }
+    import argparse
 
-    for a in alg_dict.keys():
-        for s in secrets:
-            ob = OblioContext(a(), OblioTuple(s))
-            alg_dict[a].append(ob.solve())
-        print a.__name__, sum(alg_dict[a])/float(len(alg_dict[a])), sorted(alg_dict[a])[len(alg_dict[a])/2]
+    parser = argparse.ArgumentParser(description='Play Oblio')
+    parser.add_argument('subcommand', type=str, nargs='+',
+        help='play, test, or fight')
+
+    args = parser.parse_args()
+
+    if args.subcommand[0] == 'play':
+        context = OblioContext(algorithms.ManualAlg(), OblioTuple((1, 2, 3, 4)))
+        context.solve(print_response=True)
+    elif args.subcommand[0] == 'test':
+        suite = unittest.TestLoader().loadTestsFromTestCase(UnitTests)
+        unittest.TextTestRunner(verbosity=2).run(suite)
+    elif args.subcommand[0] == 'fight':
+        ngames = 100
+        alg1, alg2 = args.subcommand[1:]
+        l_contender = getattr(algorithms, alg1)
+        r_contender = getattr(algorithms, alg2)
+
+        l_wins, r_wins = 0, 0
+        for game_cnt in xrange(0, ngames):
+            secret_tuple = OblioTuple.get_random()
+            l_cnt = OblioContext(l_contender(), secret_tuple).solve()
+            r_cnt = OblioContext(r_contender(), secret_tuple).solve()
+            
+            if l_cnt < r_cnt:
+                l_wins += 1
+            elif l_cnt > r_cnt:
+                r_wins += 1
+
+        winner, margin = (l_contender, float(l_wins)/game_cnt) \
+            if l_wins > r_wins else (r_contender, float(r_wins)/game_cnt)
+        
+        print(json.dumps({'winner': str(winner), 'margin': '%2.1f' % (margin * 100)},
+            indent=4))
+        
+    else:
+        print('Unknown subcommand: ', args.subcommand, file=sys.stderr)
+        sys.exit(1)
