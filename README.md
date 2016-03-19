@@ -2,10 +2,13 @@
 
 oblio.py: A framework to collect and trade algorithms with your friends to play Oblio.
 
-A talented and trained human get average about 12-15 guesses before converging on the solution. What can your algorithm
-do?
+"Oblio" is a game invented by my high school Computer Science teacher (rules are described below). In our senior year all CS students, as an end-of-semester project, had to produce an algorithm to play it. A tournament was held each year, and the winning students had their names memorialized in the classroom.  As I've personally grown over the years I periodically thought back to this assignment and wondered how well my contemporary self would fare against my high school self.
 
-## To play Oblio:
+A long 9-hour AMS-IAD flight equipped with a Macbook Air provided me just the opportunity to dive into this and experiment. Most of the flight was unfortunately spent building this framework, and only a few hours on devising the algorithm. My plan is for this to become a continuous project to enhance and refine my algorithms for whenever I have a few hours to kill on long-haul flights.
+
+Playing Oblio: A talented and trained human averages about 12-15 guesses before converging on the solution. What can your algorithm do?
+
+## To Play Oblio
 
  1. There exists a secret 4-digit number in which no two digits are the same.
     (e.g., "1 2 3 4" or "0 5 1 2".  "9 9 9 9" is NOT valid)
@@ -14,7 +17,7 @@ do?
 
  3. Having the result (0, 4) implies you've won and guessed the secret number correctly.
 
-## EXAMPLES:
+## Examples
 
 When the secret number is "3 9 4 5":
 
