@@ -28,3 +28,27 @@ When the secret number is "3 9 4 5":
 * If you guess "0 1 2 8", you'll get back (0, 0). Since none of the digits in your guess are in the secret number.
 
 * If your guess is "2 8 9 1", you'll get back (1, 0), implying you have one correct digit in your guess but it's not in the correct spot. You'll get this a lot and it's annoying.
+
+## Usage
+
+    $ python oblio.py [play|fight|test]
+
+### To play Oblio manually (interactively)
+
+    $ python oblio.py play
+
+### To unit test (pretty minimal)
+
+    $ python oblio.py test
+
+### To fight two algorithms
+
+    $ python oblio.py <AlgClassName> <OtherAlgClassName>
+
+(Ensure both of these exist in the algorithms directory and in the algorithms/__init__.py file)
+
+### To get metrics on random inputs for each algorithm
+
+    $ python metrics.py
+    
+(Make sure to add yours in the source)
